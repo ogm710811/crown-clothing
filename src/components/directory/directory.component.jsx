@@ -8,18 +8,15 @@ import SECTIONS_DATA from '../../sections.data';
 class Directory extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {sections: SECTIONS_DATA};
+    this.state = { sections: SECTIONS_DATA };
   }
 
   render() {
-    const {sections} = this.state;
-    return (
-      <div className='directory-menu'>
-        {sections.map(({ id, ...otherSectionProps}) => (
-          <MenuItem key={id} {...otherSectionProps}/>
-        ))}
-      </div>
-    );
+    const { sections } = this.state;
+    return (<div className='directory-menu'>
+      {sections.map(({ id, ...otherSectionProps }) => (
+        <MenuItem key={id} {...otherSectionProps} />))}
+    </div>);
   }
 }
 
