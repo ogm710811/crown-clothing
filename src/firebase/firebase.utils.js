@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
 
 const config = {
   apiKey: 'AIzaSyBf4L47DDt00u0NVaQdU8GWOZhLF5FsM-k',
@@ -11,6 +11,25 @@ const config = {
   messagingSenderId: '532118729938',
   appId: '1:532118729938:web:166ce9d648cac6dc01a90b',
   measurementId: 'G-RV029C9PF1'
+};
+
+export const createUseProfileDocument = async (userAuth, additionalData) => {
+  if (!userAuth) return;
+
+  const userRef = doc(firestore, 'users', `${userAuth.uid}`);
+  const userSnapshot = await getDoc(userRef);
+
+  if (!userSnapshot.exists()) {
+    const { displayName, email } = userAuth;
+    const createAt = new Date();
+    const userData = { displayName, email, createAt, ...additionalData };
+    try {
+      await setDoc(doc(firestore, 'users', userAuth.uid), userData);
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
+  }
+  return userRef;
 };
 
 // Initialize Firebase
